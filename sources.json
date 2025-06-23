@@ -1,0 +1,278 @@
+{
+    "rss_feeds": [
+        {
+            "name": "ESPN College Sports",
+            "url": "https://www.espn.com/espn/rss/ncb/news",
+            "priority": "high",
+            "category": "sports"
+        },
+        {
+            "name": "Sports Business Journal",
+            "url": "https://www.sportsbusinessjournal.com/Daily/Issues.aspx?rss=y",
+            "priority": "high",
+            "category": "business"
+        },
+        {
+            "name": "On3 NIL News",
+            "url": "https://www.on3.com/nil/news/feed/",
+            "priority": "high",
+            "category": "nil_specific"
+        },
+        {
+            "name": "247Sports",
+            "url": "https://247sports.com/rss/",
+            "priority": "medium",
+            "category": "recruiting"
+        },
+        {
+            "name": "The Athletic College Sports",
+            "url": "https://theathletic.com/college-sports/rss/",
+            "priority": "high",
+            "category": "sports"
+        },
+        {
+            "name": "Yahoo Sports College",
+            "url": "https://sports.yahoo.com/college/rss.xml",
+            "priority": "medium",
+            "category": "sports"
+        },
+        {
+            "name": "CBS Sports College",
+            "url": "https://www.cbssports.com/rss/headlines/college-football/",
+            "priority": "medium",
+            "category": "sports"
+        },
+        {
+            "name": "NCAA News",
+            "url": "https://www.ncaa.com/news/ncaa/rss",
+            "priority": "high",
+            "category": "governance"
+        },
+        {
+            "name": "Front Office Sports",
+            "url": "https://frontofficesports.com/feed/",
+            "priority": "high",
+            "category": "business"
+        },
+        {
+            "name": "Sportico",
+            "url": "https://www.sportico.com/feed/",
+            "priority": "high",
+            "category": "business"
+        },
+        {
+            "name": "Law360 Sports",
+            "url": "https://www.law360.com/sports/rss",
+            "priority": "medium",
+            "category": "legal"
+        },
+        {
+            "name": "USA Today Sports",
+            "url": "http://rssfeeds.usatoday.com/UsatodaycomSports-TopStories",
+            "priority": "medium",
+            "category": "sports"
+        },
+        {
+            "name": "SI College Football",
+            "url": "https://www.si.com/rss/si_collegefb.rss",
+            "priority": "medium",
+            "category": "sports"
+        },
+        {
+            "name": "Boardroom Sports Business",
+            "url": "https://boardroom.tv/feed/",
+            "priority": "medium",
+            "category": "business"
+        },
+        {
+            "name": "Action Network College",
+            "url": "https://www.actionnetwork.com/ncaaf/feed",
+            "priority": "low",
+            "category": "sports"
+        },
+        {
+            "name": "Stadium Business",
+            "url": "https://www.stadiumbusiness.com/feed/",
+            "priority": "low",
+            "category": "business"
+        },
+        {
+            "name": "Forbes Sports Money",
+            "url": "https://www.forbes.com/sportsmoney/feed/",
+            "priority": "high",
+            "category": "business"
+        },
+        {
+            "name": "Business of College Sports",
+            "url": "https://businessofcollegesports.com/feed/",
+            "priority": "high",
+            "category": "nil_specific"
+        },
+        {
+            "name": "CNBC Sports Business",
+            "url": "https://www.cnbc.com/sports/rss",
+            "priority": "medium",
+            "category": "business"
+        },
+        {
+            "name": "Bloomberg Sports Business",
+            "url": "https://www.bloomberg.com/sports/feed",
+            "priority": "medium",
+            "category": "business"
+        }
+    ],
+    "keywords": [
+        "NIL",
+        "name image likeness",
+        "name, image, likeness",
+        "NIL deal",
+        "NIL collective",
+        "student athlete",
+        "student-athlete",
+        "college athlete",
+        "athlete compensation",
+        "pay for play",
+        "NCAA rules",
+        "NCAA policy",
+        "transfer portal",
+        "recruiting",
+        "endorsement deal",
+        "sponsorship",
+        "brand deal",
+        "athlete marketing",
+        "college sports revenue",
+        "athlete earnings",
+        "NIL legislation",
+        "NIL law",
+        "NIL policy",
+        "NIL compliance",
+        "NIL marketplace",
+        "NIL platform",
+        "athlete influencer",
+        "social media deal",
+        "autograph signing",
+        "appearance fee",
+        "merchandise deal",
+        "licensing agreement",
+        "group licensing",
+        "team deal",
+        "booster",
+        "collective",
+        "NIL valuation",
+        "fair market value",
+        "amateurism",
+        "NCAA enforcement",
+        "state law",
+        "federal legislation"
+    ],
+    "advanced_filters": {
+        "high_priority_keywords": [
+            "breaking",
+            "exclusive",
+            "landmark",
+            "historic",
+            "record",
+            "million dollar",
+            "lawsuit",
+            "supreme court",
+            "new rule",
+            "policy change",
+            "investigation",
+            "sanctions",
+            "first",
+            "largest",
+            "major"
+        ],
+        "entity_keywords": [
+            "NCAA",
+            "Power 5",
+            "SEC",
+            "Big Ten",
+            "ACC",
+            "Big 12",
+            "Pac-12",
+            "Notre Dame",
+            "Alabama",
+            "Ohio State",
+            "Texas",
+            "Georgia",
+            "Michigan",
+            "USC",
+            "Opendorse",
+            "INFLCR",
+            "Icon Source",
+            "Altius Sports",
+            "SANIL",
+            "OneTeam Partners",
+            "Fanatics",
+            "Nike",
+            "Adidas",
+            "Under Armour",
+            "Gatorade",
+            "State Farm",
+            "Subway",
+            "Dollar Shave Club"
+        ],
+
+        "exclude_keywords": [
+            "professional sports",
+            "NBA",
+            "NFL", 
+            "MLB",
+            "NHL",
+            "MLS",
+            "pro athlete",
+            "professional athlete",
+            "draft",
+            "free agency",
+            "salary cap"
+        ],
+        "categories": {
+            "deals": [
+                "deal",
+                "contract",
+                "agreement",
+                "partnership",
+                "sponsorship",
+                "endorsement",
+                "signing"
+            ],
+            "policy": [
+                "rule",
+                "regulation",
+                "policy",
+                "legislation",
+                "law",
+                "compliance",
+                "enforcement",
+                "guidance"
+            ],
+            "business": [
+                "revenue",
+                "valuation",
+                "marketplace",
+                "platform",
+                "collective",
+                "fund",
+                "investment"
+            ],
+            "legal": [
+                "lawsuit",
+                "litigation",
+                "court",
+                "legal",
+                "attorney",
+                "settlement",
+                "case"
+            ],
+            "education": [
+                "guide",
+                "how to",
+                "tips",
+                "best practices",
+                "workshop",
+                "seminar"
+            ]
+        }
+    }
+}

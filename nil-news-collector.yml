@@ -1,0 +1,236 @@
+name: Weekly NIL News Collection
+
+# Trigger the workflow
+on:
+  schedule:
+    # Run every Sunday at 9 AM UTC (adjust timezone as needed)
+    - cron: "0 9 * * 0"
+
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: "Number of days to look back for articles"
+        required: false
+        default: "7"
+        type: string
+
+# Set permissions
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  collect-nil-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Python environment
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # Install system dependencies
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      # Install Python dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Create requirements.txt if it doesn't exist
+      - name: Create requirements.txt
+        run: |
+          if [ ! -f requirements.txt ]; then
+            cat > requirements.txt << EOF
+          feedparser==6.0.10
+          requests==2.31.0
+          python-docx==0.8.11
+          python-dateutil==2.8.2
+          beautifulsoup4==4.12.2
+          lxml==4.9.3
+          EOF
+          fi
+
+      # Install dependencies from requirements.txt
+      - name: Install from requirements
+        run: |
+          pip install -r requirements.txt
+
+      # Create necessary directories
+      - name: Create directories
+        run: |
+          mkdir -p data outputs logs config src
+
+      # Create sources.json if it doesn't exist
+      - name: Create sources config
+        run: |
+          if [ ! -f config/sources.json ]; then
+            mkdir -p config
+            cp sources.json config/sources.json || echo "Sources file will be created by the script"
+          fi
+
+      # Copy Python scripts to src directory
+      - name: Setup Python scripts
+        run: |
+          cp collector.py src/collector.py || echo "Collector script not found"
+          cp summarizer.py src/summarizer.py || echo "Summarizer script not found"
+
+      # Run the NIL news collection
+      - name: Collect NIL News
+        env:
+          DAYS_BACK: ${{ github.event.inputs.days_back || '7' }}
+        run: |
+          python main.py
+
+      # Get current date for file naming
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+      # Upload artifacts (files that persist after workflow)
+      - name: Upload generated files
+        uses: actions/upload-artifact@v4
+        with:
+          name: nil-news-summary-${{ steps.date.outputs.date }}
+          path: |
+            outputs/*.txt
+            outputs/*.docx
+            outputs/*.md
+            data/*.json
+          retention-days: 30
+
+      # Create a release with the files
+      - name: Create Release
+        if: success()
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: nil-news-${{ steps.date.outputs.date }}
+          name: NIL News Summary - ${{ steps.date.outputs.date }}
+          body: |
+            # NIL Weekly News Summary
+
+            **Generated:** ${{ steps.date.outputs.date }}
+
+            This release contains:
+            - 📄 Text summary for reading
+            - 📋 Word document for sharing
+            - 📝 NotebookLM script for podcast generation
+            - 📊 Raw data in JSON format
+
+            ## How to use with NotebookLM:
+            1. Download the NotebookLM script and summary files
+            2. Upload both to [NotebookLM](https://notebooklm.google.com/)
+            3. Click "Generate Podcast" to create an AI conversation about NIL news
+
+            ## Files included:
+            - `NIL_Weekly_Summary_YYYYMMDD.txt` - Text summary
+            - `NIL_Weekly_Report_YYYYMMDD.docx` - Word document  
+            - `NIL_NotebookLM_Script_YYYYMMDD.md` - Rich script for podcast
+            - `NIL_NotebookLM_Summary_YYYYMMDD.txt` - Concise summary for context
+            - `nil_articles_YYYYMMDD.json` - Raw article data
+
+            ## Top Categories This Week:
+            - 💰 Major NIL Deals
+            - 📋 Policy & Regulation Updates
+            - 🏆 Collective Activities
+            - ⚖️ Legal Developments
+            - 📱 Platform & Technology News
+          files: |
+            outputs/NIL_Weekly_Summary_${{ steps.date.outputs.date }}.txt
+            outputs/NIL_Weekly_Report_${{ steps.date.outputs.date }}.docx
+            outputs/NIL_NotebookLM_Script_${{ steps.date.outputs.date }}.md
+            outputs/NIL_NotebookLM_Summary_${{ steps.date.outputs.date }}.txt
+            data/nil_articles_${{ steps.date.outputs.date }}.json
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Email notification on success
+      - name: Send Success Email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_APP_PASSWORD }}
+          subject: "✅ NIL News Summary Ready - ${{ steps.date.outputs.date }}"
+          to: ${{ secrets.EMAIL_TO }}
+          cc: ${{ secrets.EMAIL_CC }}
+          from: ${{ secrets.EMAIL_USERNAME }}
+          body: |
+            Hi there! 🏈
+
+            Your weekly NIL (Name, Image, Likeness) news summary has been generated successfully!
+
+            📅 Date: ${{ steps.date.outputs.date }}
+            📊 Release: https://github.com/${{ github.repository }}/releases/tag/nil-news-${{ steps.date.outputs.date }}
+
+            🎧 Ready for NotebookLM:
+            1. Download the NIL_NotebookLM_Script and NIL_NotebookLM_Summary files
+            2. Upload both to https://notebooklm.google.com/
+            3. Click "Generate Podcast" to create your NIL news conversation
+
+            📋 Available files:
+            - NotebookLM Script (.md) - Rich discussion material about NIL developments
+            - NotebookLM Summary (.txt) - Concise overview of the week's news
+            - Text Summary (.txt) - Full readable summary
+            - Word Document (.docx) - Formatted report for sharing
+            - Raw Data (.json) - Source articles
+
+            💡 This week's highlights include major NIL deals, policy updates, collective activities, and more!
+
+            Happy listening! 🎧
+
+            ---
+            Generated by NIL News Monitor
+            Repository: https://github.com/${{ github.repository }}
+
+      # Email notification on failure
+      - name: Send Failure Email
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_APP_PASSWORD }}
+          subject: "❌ NIL News Collection Failed - ${{ steps.date.outputs.date }}"
+          to: ${{ secrets.EMAIL_TO }}
+          cc: ${{ secrets.EMAIL_CC }}
+          from: ${{ secrets.EMAIL_USERNAME }}
+          body: |
+            Hi there,
+
+            Unfortunately, your NIL News collection failed today.
+
+            📅 Date: ${{ steps.date.outputs.date }}
+            🔗 Workflow: https://github.com/${{ github.repository }}/actions
+
+            Please check the workflow logs to see what went wrong:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Common issues:
+            - RSS feeds might be temporarily unavailable
+            - Network connectivity issues
+            - Rate limiting from news sources
+            - Changes in RSS feed URLs
+
+            The system will try again on the next scheduled run.
+
+            ---
+            NIL News Monitor
+            Repository: https://github.com/${{ github.repository }}
